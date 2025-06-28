@@ -1,1 +1,17 @@
 estimateai-backend/.env
+
+# Node.js dependencies
+node_modules/
+
+# Environment variables
+.env
+
+
+# Ignore frontend dependencies
+estimateai-frontend/node_modules
+estimateai-frontend/package-lock.json
+
+# Ignore backend dependencies
+estimateai-backend/node_modules/
+estimateai-backend/package-lock.json
+.qodo
