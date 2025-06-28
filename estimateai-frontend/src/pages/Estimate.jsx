@@ -386,15 +386,21 @@ const Estimate = () => {
   };
 
   return (
-    <Box p={3}>
-      <Typography variant="h4" gutterBottom>
+    <Box p={4}>
+      <Typography gutterBottom color='primary' sx={{fontWeight:'bold', fontSize:40,textAlign:"center" }}>
         Create AI Estimate
       </Typography>
-      <Typography variant="subtitle1" color="textSecondary">
-        Provide details about your construction project and our AI will generate a professional estimate.
+      <Typography variant="subtitle1" gutterBottom color='white' sx={{textAlign:"center"}} >
+      Describe your construction project and let AI generate a professional estimate
       </Typography>
 
-      <Paper elevation={3} sx={{ p: 3, mt: 2 }}>
+      <Paper elevation={3} sx={{ p: 3, mt: 2}}>
+      <Typography variant="h4" gutterBottom color='primary' sx={{fontWeight:'bold', fontSize:30}}>
+      AI Construction Estimate Generator
+      </Typography>
+      <Typography variant="subtitle1"gutterBottom color='black'>
+      Describe your construction project and let AI generate a professional estimate
+      </Typography>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
@@ -435,6 +441,10 @@ const Estimate = () => {
                 rows={5}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+                sx={{
+                  width: '900px',
+                  maxWidth: '800px', // customize this value
+                }}
               />
               <IconButton
                 color={isListening ? 'secondary' : 'primary'}
@@ -446,16 +456,17 @@ const Estimate = () => {
             </Box>
           </Grid>
 
-          <Grid item xs={12}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleGenerateEstimate}
-              disabled={loading}
-            >
-              {loading ? <CircularProgress size={24} color="inherit" /> : 'Generate Estimate'}
-            </Button>
-          </Grid>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={handleGenerateEstimate}
+            disabled={loading}
+          >
+            {loading ? <CircularProgress size={24} color="inherit" /> : 'Generate Estimate'}
+          </Button>
+   
+
         </Grid>
       </Paper>
 
