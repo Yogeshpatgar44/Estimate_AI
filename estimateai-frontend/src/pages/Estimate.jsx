@@ -455,6 +455,9 @@ const Estimate = () => {
               </IconButton>
             </Box>
           </Grid>
+          <Typography variant="subtitle1"color='black'>
+             Be specific about materials, labor, timeline, permits, and any special construction requirements
+            </Typography>
 
           <Button
             variant="contained"
@@ -463,7 +466,7 @@ const Estimate = () => {
             onClick={handleGenerateEstimate}
             disabled={loading}
           >
-            {loading ? <CircularProgress size={24} color="inherit" /> : 'Generate Estimate'}
+            {loading ? <CircularProgress size={24} color="inherit" /> : 'Generate AI Construction Estimate'}
           </Button>
    
 
