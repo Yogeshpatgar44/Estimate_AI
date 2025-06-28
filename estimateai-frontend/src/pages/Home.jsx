@@ -100,10 +100,10 @@ const Home = () => {
     <Box p={3}>
       {/* Header */}
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
-        <Typography variant="h4" color="primary">
+        <Typography variant="h4" color="primary" sx={{ fontWeight: 800, fontSize:40 }} >
           DASHBOARD
         </Typography>
-        <Typography variant="subtitle1">
+        <Typography variant="subtitle1" color="white" sx={{  fontSize:20 }}>
           Welcome, {user?.fullName || 'Guest'}!
         </Typography>
 
@@ -157,11 +157,11 @@ const Home = () => {
 
       {/* Bar Chart */}
       <Box mt={5}>
-        <Typography variant="h6" gutterBottom>
+        <Typography variant="h6" gutterBottom color="white" sx={{fontSize:25,fontWeight:'bold' }}>
           Estimates by Month
         </Typography>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={chartData}>
+        <ResponsiveContainer width="100%" height={300}  >
+          <BarChart data={chartData} >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="month" />
             <YAxis allowDecimals={false} />
@@ -173,42 +173,87 @@ const Home = () => {
 
       {/* Search & Filter */}
       <Box mt={5}>
-        <Grid container spacing={2} alignItems="center" mb={2}>
-          <Grid item xs={12} md={6}>
-            <TextField
-              label="Search Estimates"
-              variant="outlined"
-              fullWidth
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </Grid>
+      <Grid container spacing={2} alignItems="center" mb={2}>
+  <Grid item xs={12} md={6}>
+    <TextField
+      label="Search Estimates"
+      variant="outlined"
+      fullWidth
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+      InputLabelProps={{
+        style: { color: 'white' }, // Label text color
+      }}
+      InputProps={{
+        style: { color: 'white' }, // Input value text color
+      }}
+      sx={{
+        '& .MuiOutlinedInput-root': {
+          '& fieldset': {
+            borderColor: 'white',
+          },
+          '&:hover fieldset': {
+            borderColor: 'white',
+          },
+          '&.Mui-focused fieldset': {
+            borderColor: 'white',
+          },
+        },
+      }}
+    />
+  </Grid>
 
-          <Grid item xs={12} md={6}>
-            <TextField
-              label="Filter by Month"
-              select
-              fullWidth
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(e.target.value)}
-            >
-              <MenuItem value="">All</MenuItem>
-              {[...Array(12).keys()].map((i) => (
-                <MenuItem key={i} value={i}>
-                  {new Date(0, i).toLocaleString('default', { month: 'long' })}
-                </MenuItem>
-              ))}
-            </TextField>
-          </Grid>
-        </Grid>
+  <Grid item xs={12} md={6}>
+    <TextField
+      label="Filter by Month"
+      select
+      fullWidth
+      value={selectedMonth}
+      onChange={(e) => setSelectedMonth(e.target.value)}
+      InputLabelProps={{
+        style: { color: 'white' },
+      }}
+      InputProps={{
+        style: { color: 'white' },
+      }}
+      sx={{
+        '& .MuiOutlinedInput-root': {
+          '& fieldset': {
+            borderColor: 'white',
+          },
+          '&:hover fieldset': {
+            borderColor: 'white',
+          },
+          '&.Mui-focused fieldset': {
+            borderColor: 'white',
+          },
+        },
+        '& .MuiSelect-icon': {
+          color: 'white',
+        },
+        '& .MuiMenuItem-root': {
+          color: 'black',
+        }
+      }}
+    >
+      <MenuItem value="">All</MenuItem>
+      {[...Array(12).keys()].map((i) => (
+        <MenuItem key={i} value={i}>
+          {new Date(0, i).toLocaleString('default', { month: 'long' })}
+        </MenuItem>
+      ))}
+    </TextField>
+  </Grid>
+</Grid>
 
-        <Typography variant="h6" gutterBottom>
+
+        <Typography variant="h6" gutterBottom color="white" sx={{fontSize:25,fontWeight:'bold' }}>
           Recent Estimates
         </Typography>
         <Divider style={{ marginBottom: '10px' }} />
 
         {filteredEstimates.length === 0 ? (
-          <Typography variant="body2">No estimates found.</Typography>
+          <Typography variant="body2" color='white' sx={{fontWeight:10, fontSize:20}}>No estimates found.</Typography>
         ) : (
           filteredEstimates.slice(0, 5).map((est, index) => (
             <Card
