@@ -318,36 +318,46 @@ const Estimate = () => {
     return true;
   };
 
-  const handleGenerateEstimate = async () => {
-    if (!validateInputs()) return;
-
-    setLoading(true);
-    setEstimate(null);
-
-    try {
-      const res = await fetch(`${BASE_URL}/estimates/generate`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: user.token,
-        },
-        body: JSON.stringify({
-          title,
-          clientName,
-          clientEmail,
-          input: description,
-        }),
-      });
-
-      const data = await res.json();
-      setEstimate(data);
-    } catch (err) {
-      console.error('Error generating estimate:', err);
-      alert('Something went wrong. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
+    const handleGenerateEstimate = async () => {
+      if (!validateInputs()) return;
+      setLoading(true);
+      setEstimate(null);
+    
+      try {
+        const res = await fetch(`${BASE_URL}/estimates/generate`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: user.token,
+          },
+          body: JSON.stringify({
+            title,
+            clientName,
+            clientEmail,
+            input: description,
+          }),
+        });
+    
+        const data = await res.json();
+        setEstimate(data);
+    
+        // Save to history
+        await fetch(`${BASE_URL}/estimates/save`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: user.token
+          },
+          body: JSON.stringify({ title, clientName, clientEmail, input: description, ...data })
+        });
+      } catch (e) {
+        console.error(e);
+        alert('AI failed');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
 
   const handleDownloadPDF = () => {
     const doc = new jsPDF();

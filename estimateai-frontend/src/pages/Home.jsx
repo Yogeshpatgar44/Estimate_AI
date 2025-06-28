@@ -221,8 +221,8 @@ const Home = () => {
                   {est.input || 'Untitled Estimate'}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
-                  {new Date(est.date).toLocaleDateString()} — ₹{est.totalCost.toLocaleString()}
-                </Typography>
+                {new Date(est.date).toLocaleDateString()} — ₹{(est.totalCost || 0).toLocaleString()}
+              </Typography>
               </CardContent>
             </Card>
           ))

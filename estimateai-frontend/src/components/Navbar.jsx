@@ -22,11 +22,19 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position="static" color="primary">
+    <AppBar position="sticky" color="primary" sx={{ top: 0, zIndex: 1100 }}>
       <Toolbar>
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          EstimateAI
-        </Typography>
+      <Box display="flex" alignItems="center" sx={{ flexGrow: 1 }}>
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/9980/9980293.png"
+        alt="EstimateAI Logo"
+        style={{ height: 40, marginRight: 10 }}
+      />
+      <Typography variant="h6" component="div">
+        EstimateAI
+      </Typography>
+    </Box>
+
         <Box sx={{ display: 'flex', gap: 2 }}>
           {user && (
             <>

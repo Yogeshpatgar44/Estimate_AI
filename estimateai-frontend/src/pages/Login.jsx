@@ -58,15 +58,17 @@ const Login = () => {
       >
         {/* Logo */}
         <Box textAlign="center" mb={2}>
-          {/* <img
-            src="https://png.pngtree.com/png-vector/20190130/ourmid/pngtree-artificial-intelligence-blue-technology-mechanical-gear-ai-brain-commercial-material-intelligencebluetechnologymechanicalgearaibraincommercial-png-image_665248.jpg" // Replace with your logo path
-            alt="EstimateAI Logo"
-            style={{ height: 60, marginBottom: 10 }}
-          /> */}
-          <Typography variant="h4" color="primary">
-            EstimateAI
-          </Typography>
-        </Box>
+            <Box display="flex" justifyContent="center" alignItems="center" gap={2}>
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/9980/9980293.png"
+                alt="EstimateAI Logo"
+                style={{ height: 60 }}
+              />
+              <Typography variant="h4" color="primary" sx={{ mt: '8px' }}>
+                EstimateAI
+              </Typography>
+            </Box>
+          </Box>
 
         {/* Title */}
         <Typography variant="h6" gutterBottom>

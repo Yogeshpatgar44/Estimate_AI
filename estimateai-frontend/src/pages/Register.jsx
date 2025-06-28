@@ -71,10 +71,17 @@ const Register = () => {
 
         {/* Header */}
         <Box textAlign="center" mb={2}>
-          <Typography variant="h4" color="primary" fontWeight={600}>
-            EstimateAI
-          </Typography>
-        </Box>
+                    <Box display="flex" justifyContent="center" alignItems="center" gap={2}>
+                      <img
+                        src="https://cdn-icons-png.flaticon.com/512/9980/9980293.png"
+                        alt="EstimateAI Logo"
+                        style={{ height: 60 }}
+                      />
+                      <Typography variant="h4" color="primary" sx={{ mt: '8px' }}>
+                        EstimateAI
+                      </Typography>
+                    </Box>
+                  </Box>
         <Typography variant="h6" gutterBottom>
           Create Account
         </Typography>
