@@ -36,7 +36,7 @@ const Register = () => {
     }
 
     try {
-      await register(username, password);
+      await register({fullName,username, password});
       enqueueSnackbar('Registered successfully!', { variant: 'success' });
       navigate('/estimate');
     // eslint-disable-next-line no-unused-vars
@@ -50,7 +50,6 @@ const Register = () => {
       sx={{
         minHeight: '100vh',
         backgroundImage: 'url(https://www.azorobotics.com/images/Article_Images/ImageForArticle_520_16535679756556228.jpg)',
-        backgroundSize: 'cover',
         backgroundPosition: 'bottom',
         display: 'flex',
         alignItems: 'center',

@@ -38,7 +38,6 @@ const Login = () => {
       sx={{
         minHeight: '100vh',
         backgroundImage: 'url(https://www.azorobotics.com/images/Article_Images/ImageForArticle_520_16535679756556228.jpg)',
-        backgroundSize: 'cover',
         backgroundPosition: 'bottom',
         display: 'flex',
         alignItems: 'center',

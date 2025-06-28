@@ -104,8 +104,9 @@ const Home = () => {
           DASHBOARD
         </Typography>
         <Typography variant="subtitle1">
-          Welcome, {user?.username || 'Guest'}!
+          Welcome, {user?.fullName || 'Guest'}!
         </Typography>
+
       </Box>
       <Grid container spacing={2} sx={{display:'flex',justifyContent:"space-between"}}>
       <Grid item xs={12} md={4}>

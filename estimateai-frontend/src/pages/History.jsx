@@ -22,6 +22,7 @@ const History = () => {
   }, [user]);
 
   return (
+    
     <div style={{ padding: '20px' }}>
       <Typography variant="h4" gutterBottom>Estimate History</Typography>
       {estimates.length === 0 ? (
