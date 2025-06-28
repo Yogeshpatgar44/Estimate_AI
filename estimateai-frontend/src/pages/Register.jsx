@@ -38,7 +38,7 @@ const Register = () => {
     try {
       await register({fullName,username, password});
       enqueueSnackbar('Registered successfully!', { variant: 'success' });
-      navigate('/estimate');
+      navigate('/');
     // eslint-disable-next-line no-unused-vars
     } catch (err) {
       enqueueSnackbar('Username already taken', { variant: 'error' });

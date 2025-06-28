@@ -110,7 +110,7 @@ const Home = () => {
       </Box>
       <Grid container spacing={2} sx={{display:'flex',justifyContent:"space-between"}}>
       <Grid item xs={12} md={4}>
-        <Card sx={{ ...cardStyles, backgroundColor: '#1976d2', flexDirection: { xs: 'column', sm: 'row' } }}>
+        <Card sx={{ ...cardStyles, backgroundColor: '	#daa520', flexDirection: { xs: 'column', sm: 'row' } }}>
           <CardContent sx={{ flex: 1 }}>
             <Typography variant="subtitle2">Total Estimates</Typography>
             <Typography variant="h6">{totalEstimates}</Typography>
