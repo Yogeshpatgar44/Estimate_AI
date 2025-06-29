@@ -15,6 +15,7 @@ import MicIcon from '@mui/icons-material/Mic';
 import jsPDF from 'jspdf';
 import { AuthContext } from '../context/AuthContext';
 import BASE_URL from '../services/api';
+import { useNavigate } from 'react-router-dom';
 
 const Estimate = () => {
   const { user } = useContext(AuthContext);
@@ -26,6 +27,8 @@ const Estimate = () => {
   const [isListening, setIsListening] = useState(false);
   const [loading, setLoading] = useState(false);
   const recognitionRef = useRef(null);
+
+  const navigate = useNavigate();
 
   const SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -233,7 +236,16 @@ const Estimate = () => {
       {estimate && (
         <Card sx={{ mt: 4 }}>
           <CardContent>
-            <Typography variant="h6">Estimate Summary</Typography>
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Typography variant="h6">Estimate Summary</Typography>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => navigate(`/edit-estimate/${estimate._id}`)}
+          >
+            Edit Estimate
+          </Button>
+        </Box>
 
             <Typography variant="subtitle2" sx={{ mt: 2 }}>Materials:</Typography>
             {estimate?.materials?.map((mat, i) => (
@@ -252,6 +264,8 @@ const Estimate = () => {
             <Typography variant="h6" sx={{ mt: 2 }}>
               Total Estimate: ₹{estimate.totalCost}
             </Typography>
+
+
 
             <Button
               variant="outlined"
