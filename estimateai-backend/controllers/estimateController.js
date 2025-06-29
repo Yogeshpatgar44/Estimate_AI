@@ -114,43 +114,76 @@ exports.getEstimates = async (req, res) => {
 };
 
 // PATCH /api/estimates/:id
+// exports.updateEstimate = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+
+//     const {
+//       title,
+//       clientName,
+//       clientEmail,
+//       input,
+//       materials,
+//       labor,
+//       equipment,
+//       subtotal,
+//       tax,
+//       totalCost,
+//     } = req.body;
+
+//     const updated = await Estimate.findByIdAndUpdate(
+//       id,
+//       {
+//         ...(title && { title }),
+//         ...(clientName && { clientName }),
+//         ...(clientEmail && { clientEmail }),
+//         ...(input && { input }),
+//         ...(materials && { materials }),
+//         ...(labor && { labor }),
+//         ...(equipment && { equipment }),
+//         ...(subtotal !== undefined && { subtotal }),
+//         ...(tax !== undefined && { tax }),
+//         ...(totalCost !== undefined && { totalCost }),
+//       },
+//       { new: true }
+//     );
+
+//     if (!updated) {
+//       return res.status(404).json({ error: 'Estimate not found' });
+//     }
+
+//     res.json(updated);
+//   } catch (err) {
+//     console.error('Update Error:', err.message);
+//     res.status(500).json({ error: 'Failed to update estimate' });
+//   }
+// };
+
+// In estimateController.js
 exports.updateEstimate = async (req, res) => {
   try {
     const { id } = req.params;
+    const { items, notes, title, clientName, clientEmail } = req.body;
 
-    const {
-      title,
-      clientName,
-      clientEmail,
-      input,
-      materials,
-      labor,
-      equipment,
-      subtotal,
-      tax,
-      totalCost,
-    } = req.body;
+    const materials = items.filter(i => i.type === 'Materials');
+    const labor = items.filter(i => i.type === 'Labor');
+    const equipment = items.filter(i => i.type === 'Equipment');
+
+    const subtotal =
+      materials.reduce((sum, m) => sum + m.quantity * m.unitCost, 0) +
+      labor.reduce((sum, l) => sum + l.quantity * l.unitCost, 0) +
+      equipment.reduce((sum, e) => sum + e.quantity * e.unitCost, 0);
+
+    const tax = subtotal * 0.1;
+    const totalCost = subtotal + tax;
 
     const updated = await Estimate.findByIdAndUpdate(
       id,
-      {
-        ...(title && { title }),
-        ...(clientName && { clientName }),
-        ...(clientEmail && { clientEmail }),
-        ...(input && { input }),
-        ...(materials && { materials }),
-        ...(labor && { labor }),
-        ...(equipment && { equipment }),
-        ...(subtotal !== undefined && { subtotal }),
-        ...(tax !== undefined && { tax }),
-        ...(totalCost !== undefined && { totalCost }),
-      },
+      { materials, labor, equipment, notes, title, clientName, clientEmail, subtotal, tax, totalCost },
       { new: true }
     );
 
-    if (!updated) {
-      return res.status(404).json({ error: 'Estimate not found' });
-    }
+    if (!updated) return res.status(404).json({ error: 'Estimate not found' });
 
     res.json(updated);
   } catch (err) {
@@ -158,6 +191,7 @@ exports.updateEstimate = async (req, res) => {
     res.status(500).json({ error: 'Failed to update estimate' });
   }
 };
+
 
 
 exports.getEstimateById = async (req, res) => {
