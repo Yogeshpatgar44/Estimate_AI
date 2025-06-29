@@ -177,83 +177,68 @@ const Home = () => {
 
       {/* Search & Filter */}
       <Box mt={5}>
-      <Grid container spacing={2} alignItems="center" mb={2}>
-  <Grid item xs={12} md={6}>
-    <TextField
-      label="Search Estimates"
-      variant="outlined"
-      fullWidth
-      value={search}
-      onChange={(e) => setSearch(e.target.value)}
-      InputLabelProps={{
-        style: { color: 'white' }, // Label text color
-      }}
-      InputProps={{
-        style: { color: 'white' }, // Input value text color
-      }}
-      sx={{
-        '& .MuiOutlinedInput-root': {
-          '& fieldset': {
-            borderColor: 'white',
-          },
-          '&:hover fieldset': {
-            borderColor: 'white',
-          },
-          '&.Mui-focused fieldset': {
-            borderColor: 'white',
-          },
-        },
-      }}
-    />
-  </Grid>
 
-  <Grid item xs={12} md={6}>
-    <TextField
-      label="Filter by Month"
-      select
-      fullWidth
-      value={selectedMonth}
-      onChange={(e) => setSelectedMonth(e.target.value)}
-      InputLabelProps={{
-        style: { color: 'white' },
-      }}
-      InputProps={{
-        style: { color: 'white' },
-      }}
-      sx={{
-        '& .MuiOutlinedInput-root': {
-          '& fieldset': {
-            borderColor: 'white',
-          },
-          '&:hover fieldset': {
-            borderColor: 'white',
-          },
-          '&.Mui-focused fieldset': {
-            borderColor: 'white',
-          },
-        },
-        '& .MuiSelect-icon': {
-          color: 'white',
-        },
-        '& .MuiMenuItem-root': {
-          color: 'black',
-        }
-      }}
-    >
-      <MenuItem value="">All</MenuItem>
-      {[...Array(12).keys()].map((i) => (
-        <MenuItem key={i} value={i}>
-          {new Date(0, i).toLocaleString('default', { month: 'long' })}
-        </MenuItem>
-      ))}
-    </TextField>
-  </Grid>
-</Grid>
-
-
-        <Typography variant="h6" gutterBottom color="white" sx={{fontSize:25,fontWeight:'bold' }}>
+      <Grid container alignItems="center" justifyContent="space-between" spacing={2}>
+      {/* Recent Estimates Title */}
+      <Grid item xs={12} md={3}>
+        <Typography variant="h6" color="white" sx={{ fontSize: 25, fontWeight: 'bold' }}>
           Recent Estimates
         </Typography>
+      </Grid>
+
+    
+    {/* Search and Filter Inputs */}
+    <Grid item xs={12} md={9}>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={6}>
+          <TextField
+            label="Search Estimates"
+            variant="outlined"
+            fullWidth
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            InputLabelProps={{ style: { color: 'white' } }}
+            InputProps={{ style: { color: 'white' } }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': { borderColor: 'white' },
+                '&:hover fieldset': { borderColor: 'white' },
+                '&.Mui-focused fieldset': { borderColor: 'white' },
+              },
+            }}
+          />
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <TextField
+            label="Filter by Month"
+            select
+            fullWidth
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
+            InputLabelProps={{ style: { color: 'white' } }}
+            InputProps={{ style: { color: 'white' } }}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': { borderColor: 'white' },
+                '&:hover fieldset': { borderColor: 'white' },
+                '&.Mui-focused fieldset': { borderColor: 'white' },
+              },
+              '& .MuiSelect-icon': { color: 'white' },
+              '& .MuiMenuItem-root': { color: 'black' }
+            }}
+          >
+            <MenuItem value="">All</MenuItem>
+            {[...Array(12).keys()].map((i) => (
+              <MenuItem key={i} value={i}>
+                {new Date(0, i).toLocaleString('default', { month: 'long' })}
+              </MenuItem>
+                    ))}
+                  </TextField>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
         <Divider style={{ marginBottom: '10px' }} />
 
         {filteredEstimates.length === 0 ? (
