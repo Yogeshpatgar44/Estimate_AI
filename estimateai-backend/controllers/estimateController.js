@@ -7,7 +7,7 @@ exports.generateEstimate = async (req, res) => {
   const { title, clientName, clientEmail, input } = req.body;
 
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' }); // ✅ correct model
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
 
     const prompt = `
 You are a construction estimator AI. Given this project description, return a JSON object with the following structure:
@@ -15,6 +15,7 @@ You are a construction estimator AI. Given this project description, return a JS
 {
   "materials": [{ "item": "Bricks", "quantity": 500, "unitCost": 6 }],
   "labor": [{ "role": "Mason", "days": 5, "dailyRate": 800 }],
+  "equipment": [{ "item": "Excavator", "quantity": 2, "unitCost": 5000 }],
   "notes": "Any important notes"
 }
 
@@ -25,49 +26,74 @@ Description: ${input}
     const response = await result.response;
     const text = response.text();
 
-    // Remove markdown and parse
     const jsonText = text.replace(/```json|```/g, '').trim();
     const parsed = JSON.parse(jsonText);
 
-    const totalCost =
+    const subtotal =
       parsed.materials.reduce((sum, m) => sum + m.quantity * m.unitCost, 0) +
-      parsed.labor.reduce((sum, l) => sum + l.days * l.dailyRate, 0);
+      parsed.labor.reduce((sum, l) => sum + l.days * l.dailyRate, 0) +
+      parsed.equipment.reduce((sum, e) => sum + e.quantity * e.unitCost, 0);
 
-    res.json({
+    const tax = subtotal * 0.1;
+    const totalCost = subtotal + tax;
+
+    return res.status(200).json({
       title,
       clientName,
       clientEmail,
-      ...parsed,
+      input,
+      materials: parsed.materials,
+      labor: parsed.labor,
+      equipment: parsed.equipment,
+      notes: parsed.notes || '',
+      subtotal,
+      tax,
       totalCost,
     });
   } catch (err) {
     console.error('Gemini AI Error:', err);
-  
-    // Fallback mock estimate
-    const mockEstimate = {
-      materials: [
-        { item: "Bricks", quantity: 500, unitCost: 6 },
-        { item: "Cement Bags", quantity: 20, unitCost: 350 }
-      ],
-      labor: [
-        { role: "Labor", days: 10, dailyRate: 800 }
-      ],
-      notes: "This is a mock AI-generated estimate.",
-    };
-  
-    const totalCost =
-      mockEstimate.materials.reduce((sum, m) => sum + m.quantity * m.unitCost, 0) +
-      mockEstimate.labor.reduce((sum, l) => sum + l.days * l.dailyRate, 0);
-  
+
+    const fallbackMaterials = [
+      { item: "Bricks", quantity: 500, unitCost: 6 },
+      { item: "Cement Bags", quantity: 20, unitCost: 350 }
+    ];
+
+    const fallbackLabor = [
+      { role: "Labor", days: 10, dailyRate: 800 }
+    ];
+
+    const fallbackEquipment = [
+      { item: "Mixer Machine", quantity: 1, unitCost: 5000 },
+      { item: "Scaffolding", quantity: 10, unitCost: 1000 }
+    ];
+
+    const subtotal =
+      fallbackMaterials.reduce((sum, m) => sum + m.quantity * m.unitCost, 0) +
+      fallbackLabor.reduce((sum, l) => sum + l.days * l.dailyRate, 0) +
+      fallbackEquipment.reduce((sum, e) => sum + e.quantity * e.unitCost, 0);
+
+    const tax = subtotal * 0.1;
+    const totalCost = subtotal + tax;
+
     return res.status(200).json({
-      title: req.body.title,
-      clientName: req.body.clientName,
-      clientEmail: req.body.clientEmail,
-      ...mockEstimate,
+      title,
+      clientName,
+      clientEmail,
+      input,
+      materials: fallbackMaterials,
+      labor: fallbackLabor,
+      equipment: fallbackEquipment,
+      notes: "This is a mock AI-generated estimate including equipment.",
+      subtotal,
+      tax,
       totalCost,
     });
   }
-}
+};
+
+
+
+
 exports.saveEstimate = async (req, res) => {
   try {
     const estimate = await Estimate.create({ user: req.user.id, ...req.body });
@@ -76,6 +102,7 @@ exports.saveEstimate = async (req, res) => {
     res.status(500).json({ message: 'Error saving estimate' });
   }
 };
+
 
 exports.getEstimates = async (req, res) => {
   try {
@@ -90,20 +117,34 @@ exports.getEstimates = async (req, res) => {
 exports.updateEstimate = async (req, res) => {
   try {
     const { id } = req.params;
-    const { items } = req.body;
 
-    // Split items back into materials and labor
-    const materials = items.filter(item => item.type === 'Material');
-    const labor = items.filter(item => item.type === 'Labor');
-
-    // Recalculate totalCost
-    const totalMaterialCost = materials.reduce((sum, m) => sum + m.quantity * m.rate, 0);
-    const totalLaborCost = labor.reduce((sum, l) => sum + l.quantity * l.rate, 0);
-    const totalCost = totalMaterialCost + totalLaborCost;
+    const {
+      title,
+      clientName,
+      clientEmail,
+      input,
+      materials,
+      labor,
+      equipment,
+      subtotal,
+      tax,
+      totalCost,
+    } = req.body;
 
     const updated = await Estimate.findByIdAndUpdate(
       id,
-      { materials, labor, totalCost },
+      {
+        ...(title && { title }),
+        ...(clientName && { clientName }),
+        ...(clientEmail && { clientEmail }),
+        ...(input && { input }),
+        ...(materials && { materials }),
+        ...(labor && { labor }),
+        ...(equipment && { equipment }),
+        ...(subtotal !== undefined && { subtotal }),
+        ...(tax !== undefined && { tax }),
+        ...(totalCost !== undefined && { totalCost }),
+      },
       { new: true }
     );
 
@@ -117,6 +158,7 @@ exports.updateEstimate = async (req, res) => {
     res.status(500).json({ error: 'Failed to update estimate' });
   }
 };
+
 
 exports.getEstimateById = async (req, res) => {
   try {
