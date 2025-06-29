@@ -117,3 +117,13 @@ exports.updateEstimate = async (req, res) => {
     res.status(500).json({ error: 'Failed to update estimate' });
   }
 };
+
+exports.getEstimateById = async (req, res) => {
+  try {
+    const estimate = await Estimate.findById(req.params.id);
+    if (!estimate) return res.status(404).json({ error: 'Estimate not found' });
+    res.json(estimate);
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+};
