@@ -85,3 +85,35 @@ exports.getEstimates = async (req, res) => {
     res.status(500).json({ message: 'Error fetching estimates' });
   }
 };
+
+// PATCH /api/estimates/:id
+exports.updateEstimate = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { items } = req.body;
+
+    // Split items back into materials and labor
+    const materials = items.filter(item => item.type === 'Material');
+    const labor = items.filter(item => item.type === 'Labor');
+
+    // Recalculate totalCost
+    const totalMaterialCost = materials.reduce((sum, m) => sum + m.quantity * m.rate, 0);
+    const totalLaborCost = labor.reduce((sum, l) => sum + l.quantity * l.rate, 0);
+    const totalCost = totalMaterialCost + totalLaborCost;
+
+    const updated = await Estimate.findByIdAndUpdate(
+      id,
+      { materials, labor, totalCost },
+      { new: true }
+    );
+
+    if (!updated) {
+      return res.status(404).json({ error: 'Estimate not found' });
+    }
+
+    res.json(updated);
+  } catch (err) {
+    console.error('Update Error:', err.message);
+    res.status(500).json({ error: 'Failed to update estimate' });
+  }
+};
