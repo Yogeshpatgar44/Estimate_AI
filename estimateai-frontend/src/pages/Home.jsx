@@ -281,7 +281,7 @@ const Home = () => {
       </IconButton>
       <IconButton
         color="secondary"
-        onClick={() => navigate('/editor', { state: { estimateData: est } })}
+        onClick={() => navigate(`/edit-estimate/${est._id}`, { state: { estimateData: est } })}
         title="Edit"
       >
         <EditIcon />
