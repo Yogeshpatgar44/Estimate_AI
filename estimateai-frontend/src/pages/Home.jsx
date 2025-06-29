@@ -26,7 +26,7 @@ import AssessmentIcon from "@mui/icons-material/Assessment";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
-import VisibilityIcon from '@mui/icons-material/Visibility';
+// import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import { IconButton } from '@mui/material';
 
@@ -246,10 +246,11 @@ const Home = () => {
         ) : (
           filteredEstimates.slice(0, 5).map((est, index) => (
             <Card key={index} sx={{ marginBottom: 2 }}>
+              
   <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
     <Box>
       <Typography variant="subtitle1">
-        {est.input || 'Untitled Estimate'}
+        {est.title  || 'Untitled Estimate'}
       </Typography>
       <Typography variant="body2" color="textSecondary">
         {new Date(est.date).toLocaleDateString()} — ₹{(est.totalCost || 0).toLocaleString()}
@@ -262,13 +263,13 @@ const Home = () => {
         onClick={() => navigate(`/estimate/${est._id}`)}
         title="View"
       >
-        <VisibilityIcon />
+        {/* <VisibilityIcon />
       </IconButton>
       <IconButton
         color="secondary"
         onClick={() => navigate(`/edit-estimate/${est._id}`, { state: { estimateData: est } })}
         title="Edit"
-      >
+      > */}
         <EditIcon />
       </IconButton>
     </Box>
