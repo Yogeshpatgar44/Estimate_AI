@@ -8,8 +8,6 @@ import { useParams } from 'react-router-dom';
 import BASE_URL from '../services/api'; // your backend base URL
 import { AuthContext } from '../context/AuthContext';
 import { useContext } from 'react';
-import PDFPreview from './PDFPreview'; // adjust path if needed
-
 
 const EditEstimate = () => {
   const { id } = useParams();
@@ -293,21 +291,6 @@ const EditEstimate = () => {
           Save Estimate
         </Button>
       </Box>
-
-      {/* PDF Preview */}
-        <Box mt={6}>
-          <Typography variant="h6" gutterBottom>PDF Preview</Typography>
-          <PDFPreview
-            estimate={{
-              _id: estimate._id,
-              createdAt: estimate.createdAt,
-              clientName,
-              title,
-              items,
-              notes
-            }}
-          />
-        </Box>
 
     </Paper>
   );
