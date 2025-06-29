@@ -26,7 +26,7 @@ import AssessmentIcon from "@mui/icons-material/Assessment";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
-// import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import { IconButton } from '@mui/material';
 
@@ -258,18 +258,18 @@ const Home = () => {
     </Box>
 
     <Box>
-      <IconButton
+      {/* <IconButton
         color="primary"
         onClick={() => navigate(`/estimate/${est._id}`)}
         title="View"
       >
-        {/* <VisibilityIcon />
-      </IconButton>
+        <VisibilityIcon />
+      </IconButton> */}
       <IconButton
         color="secondary"
         onClick={() => navigate(`/edit-estimate/${est._id}`, { state: { estimateData: est } })}
         title="Edit"
-      > */}
+      >
         <EditIcon />
       </IconButton>
     </Box>
