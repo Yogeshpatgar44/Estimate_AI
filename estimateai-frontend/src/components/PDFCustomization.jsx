@@ -40,7 +40,7 @@ const PDFCustomization = ({ estimate }) => {
   };
 
   return (
-    <Box sx={{backgroundColor:'white', padding:4,borderRadius:1}}>
+    <Box sx={{backgroundColor:'white', padding:4,borderRadius:1,maxWidth: 800,margin: 'auto'}}>
       <Typography variant="h5" gutterBottom fontWeight="bold">
         PDF Customization
       </Typography>

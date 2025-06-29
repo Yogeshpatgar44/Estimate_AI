@@ -33,7 +33,7 @@ const ExportShare = ({ estimate }) => {
   };
 
   return (
-    <Paper sx={{ p: 4 }}>
+    <Paper sx={{ p: 4 ,maxWidth: 800,margin: 'auto' }}>
       <Typography variant="h5" fontWeight="bold" gutterBottom>
         Export & Share
       </Typography>

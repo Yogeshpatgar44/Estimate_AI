@@ -16,7 +16,7 @@ const PDFPreview = ({ estimate }) => {
   const total = subtotal + tax;
 
   return (
-    <Paper sx={{ p: 4 }}>
+    <Paper sx={{ p: 4 ,maxWidth: 800,margin: 'auto'}}>
       <Typography variant="h5" fontWeight="bold" gutterBottom>
         PDF Preview
       </Typography>
