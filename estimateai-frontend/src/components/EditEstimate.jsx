@@ -37,7 +37,7 @@ const EditEstimate = () => {
         setNotes(data.notes || '');
         const combinedItems = [];
 
-        data.materials?.forEach(m => combinedItems.push({ ...m, type: 'Material' }));
+        data.materials?.forEach(m => combinedItems.push({ ...m, type: 'Materials' }));
         data.labor?.forEach(l => combinedItems.push({ ...l, type: 'Labor' }));
         data.equipment?.forEach(e => combinedItems.push({ ...e, type: 'Equipment' }));
 
@@ -235,7 +235,7 @@ const EditEstimate = () => {
           <TableBody>
             {groups.map((group) =>
               items
-                .filter(item => item.type === group)
+                .filter(item => item.type.toLowerCase() === group.toLowerCase())
                 .map((item, i) => (
                   <TableRow key={group + i}>
                     <TableCell>{group}</TableCell>
