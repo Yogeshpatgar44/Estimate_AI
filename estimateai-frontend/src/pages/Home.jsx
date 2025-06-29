@@ -26,6 +26,10 @@ import AssessmentIcon from "@mui/icons-material/Assessment";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import EditIcon from '@mui/icons-material/Edit';
+import { IconButton } from '@mui/material';
+
 
 const Home = () => {
   const { user } = useContext(AuthContext);
@@ -256,20 +260,36 @@ const Home = () => {
           <Typography variant="body2" color='white' sx={{fontWeight:10, fontSize:20}}>No estimates found.</Typography>
         ) : (
           filteredEstimates.slice(0, 5).map((est, index) => (
-            <Card
-              key={index}
-              style={{ marginBottom: '10px', cursor: 'pointer' }}
-              onClick={() => navigate(`/estimate/${est._id}`)}
-            >
-              <CardContent>
-                <Typography variant="subtitle1">
-                  {est.input || 'Untitled Estimate'}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                {new Date(est.date).toLocaleDateString()} — ₹{(est.totalCost || 0).toLocaleString()}
-              </Typography>
-              </CardContent>
-            </Card>
+            <Card key={index} sx={{ marginBottom: 2 }}>
+  <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <Box>
+      <Typography variant="subtitle1">
+        {est.input || 'Untitled Estimate'}
+      </Typography>
+      <Typography variant="body2" color="textSecondary">
+        {new Date(est.date).toLocaleDateString()} — ₹{(est.totalCost || 0).toLocaleString()}
+      </Typography>
+    </Box>
+
+    <Box>
+      <IconButton
+        color="primary"
+        onClick={() => navigate(`/estimate/${est._id}`)}
+        title="View"
+      >
+        <VisibilityIcon />
+      </IconButton>
+      <IconButton
+        color="secondary"
+        onClick={() => navigate('/editor', { state: { estimateData: est } })}
+        title="Edit"
+      >
+        <EditIcon />
+      </IconButton>
+    </Box>
+  </CardContent>
+</Card>
+
           ))
         )}
       </Box>
