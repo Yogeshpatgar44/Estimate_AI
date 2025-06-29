@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -12,13 +12,13 @@ import {
   Divider,
 } from '@mui/material';
 
-const PDFCustomization = ({ estimate }) => {
+const PDFCustomization = ({ estimate, onSave }) => {
   const [companyInfo, setCompanyInfo] = useState({
-    name: 'Your Company Name',
-    phone: '(555) 123-4567',
-    address: '123 Business Street, City, State 12345',
-    email: 'info@yourcompany.com',
-    website: 'www.yourcompany.com',
+    name: '',
+    phone: '',
+    address: '',
+    email: '',
+    website: '',
     logo: null,
   });
 
@@ -35,17 +35,40 @@ const PDFCustomization = ({ estimate }) => {
     terms: 'Payment is due within 30 days. This estimate is valid for 30 days.',
   });
 
+  // 🧠 Pre-fill company info using estimate
+  useEffect(() => {
+    if (estimate) {
+      setCompanyInfo((prev) => ({
+        ...prev,
+        name: estimate.clientName || '',
+        email: estimate.clientEmail || '',
+      }));
+    }
+  }, [estimate]);
+
   const handleLogoUpload = (e) => {
     setCompanyInfo({ ...companyInfo, logo: e.target.files[0] });
   };
 
+  const handleSave = () => {
+    const customization = {
+      companyInfo,
+      styling,
+      footer,
+    };
+    localStorage.setItem('pdfCustomization', JSON.stringify(customization)); // ✅ Save it
+    if (onSave) onSave(customization);
+    alert('PDF customization saved!');
+  };
+  
+
   return (
-    <Box sx={{backgroundColor:'white', padding:4,borderRadius:1,maxWidth: 800,margin: 'auto'}}>
+    <Box sx={{ backgroundColor: 'white', padding: 4, borderRadius: 1, maxWidth: 800, margin: 'auto' }}>
       <Typography variant="h5" gutterBottom fontWeight="bold">
         PDF Customization
       </Typography>
 
-      {/* Company Info Section */}
+      {/* Company Info */}
       <Box mt={3}>
         <Typography variant="h6" gutterBottom>
           Company Information
@@ -193,9 +216,10 @@ const PDFCustomization = ({ estimate }) => {
         />
       </Box>
 
-      {/* Save/Apply Section (Optional) */}
       <Divider sx={{ my: 4 }} />
-      <Button variant="contained" color="primary">
+
+      {/* Save Customization */}
+      <Button variant="contained" color="primary" onClick={handleSave}>
         Save PDF Settings
       </Button>
     </Box>
