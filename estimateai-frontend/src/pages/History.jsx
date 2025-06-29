@@ -22,7 +22,7 @@ const History = () => {
   return (
     
     <div style={{ padding: '20px' }}>
-      <Typography variant="h4" gutterBottom>Estimate History</Typography>
+      <Typography variant="h4" gutterBottom color='white' sx={{fontWeight:'bold'}}>Estimate History</Typography>
       {estimates.length === 0 ? (
         <Typography>No estimates found.</Typography>
       ) : (
