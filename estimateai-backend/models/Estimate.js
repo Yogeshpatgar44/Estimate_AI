@@ -7,7 +7,6 @@ const EstimateSchema = new mongoose.Schema({
   clientEmail: String,
   input: String,
   materials: Array,
-  labor: Array,
   equipment: Array,
   subtotal: Number,
   tax: Number,

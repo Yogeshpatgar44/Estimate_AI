@@ -10,17 +10,16 @@ exports.generateEstimate = async (req, res) => {
     const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
 
     const prompt = `
-You are a construction estimator AI. Given this project description, return a JSON object with the following structure:
+      You are a construction estimator AI. Given this project description, return a JSON object with the following structure:
 
-{
-  "materials": [{ "item": "Bricks", "quantity": 500, "unitCost": 6 }],
-  "labor": [{ "role": "Mason", "days": 5, "dailyRate": 800 }],
-  "equipment": [{ "item": "Excavator", "quantity": 2, "unitCost": 5000 }],
-  "notes": "Any important notes"
-}
+      {
+        "materials": [{ "item": "Bricks", "quantity": 500, "unitCost": 6 }],
+        "equipment": [{ "item": "Excavator", "quantity": 2, "unitCost": 5000 }],
+        "notes": "Any important notes"
+      }
 
-Description: ${input}
-`;
+      Description: ${input}
+      `;
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
@@ -112,52 +111,6 @@ exports.getEstimates = async (req, res) => {
     res.status(500).json({ message: 'Error fetching estimates' });
   }
 };
-
-// PATCH /api/estimates/:id
-// exports.updateEstimate = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-
-//     const {
-//       title,
-//       clientName,
-//       clientEmail,
-//       input,
-//       materials,
-//       labor,
-//       equipment,
-//       subtotal,
-//       tax,
-//       totalCost,
-//     } = req.body;
-
-//     const updated = await Estimate.findByIdAndUpdate(
-//       id,
-//       {
-//         ...(title && { title }),
-//         ...(clientName && { clientName }),
-//         ...(clientEmail && { clientEmail }),
-//         ...(input && { input }),
-//         ...(materials && { materials }),
-//         ...(labor && { labor }),
-//         ...(equipment && { equipment }),
-//         ...(subtotal !== undefined && { subtotal }),
-//         ...(tax !== undefined && { tax }),
-//         ...(totalCost !== undefined && { totalCost }),
-//       },
-//       { new: true }
-//     );
-
-//     if (!updated) {
-//       return res.status(404).json({ error: 'Estimate not found' });
-//     }
-
-//     res.json(updated);
-//   } catch (err) {
-//     console.error('Update Error:', err.message);
-//     res.status(500).json({ error: 'Failed to update estimate' });
-//   }
-// };
 
 // In estimateController.js
 exports.updateEstimate = async (req, res) => {
