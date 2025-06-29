@@ -97,9 +97,8 @@ const Estimate = () => {
         }),
       });
   
-      const data = await res.json(); // This is just the calculated estimate (without _id)
+      const data = await res.json();
   
-      // Save to history
       const saveRes = await fetch(`${BASE_URL}/estimates/save`, {
         method: 'POST',
         headers: {
@@ -115,9 +114,11 @@ const Estimate = () => {
         }),
       });
   
-      const savedData = await saveRes.json(); // This includes the _id from MongoDB
-      setEstimate(savedData); // now estimate._id will be available
+      const savedData = await saveRes.json();
+      setEstimate(savedData);
   
+      // ✅ Navigate to /edit-estimate/:id
+      navigate(`/edit-estimate/${savedData._id}`);
     } catch (e) {
       console.error(e);
       alert('AI failed');
@@ -125,6 +126,7 @@ const Estimate = () => {
       setLoading(false);
     }
   };
+  
   
 
   const handleDownloadPDF = () => {
