@@ -8,7 +8,7 @@ import Register from './pages/Register';
 import History from './pages/History';
 import Layout from './components/Layout';
 import PrivateRoute from './routes/PrivateRoute';
-import EstimateEditor from './components/EstimateEditor';
+import EstimateEditor from './pages/EstimateEditor';
 import "./App.css";
 //this is main file
 
