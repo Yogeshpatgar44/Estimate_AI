@@ -56,7 +56,7 @@ const History = () => {
     <div style={{ padding: '20px' }}>
       <Typography variant="h4" gutterBottom color='white' sx={{fontWeight:'bold'}}>Estimate History</Typography>
       {estimates.length === 0 ? (
-        <Typography>No estimates found.</Typography>
+        <Typography color='white'>No estimates found.</Typography>
       ) : (
         estimates.map((est, idx) => (
           <Card key={idx} style={{ margin: '10px 0' }}>
