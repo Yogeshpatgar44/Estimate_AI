@@ -205,10 +205,16 @@ const PDFPreview = () => {
   const fontSizeMap = { small: '14px', medium: '16px', large: '18px' };
   const fontSize = fontSizeMap[styling.fontSize] || '16px';
 
-  const items = estimate.items || [];
+  const materials = estimate.materials || [];
+  const labor = estimate.labor || [];
+  const equipment = estimate.equipment || [];
+
+  const items = [...materials, ...labor, ...equipment];
+
   const subtotal = items.reduce((acc, item) => acc + item.quantity * item.unitCost, 0);
   const tax = subtotal * 0.1;
   const total = subtotal + tax;
+
 
   return (
     <Paper sx={{ p: 4, maxWidth: 1000, margin: 'auto', fontFamily, fontSize }}>
@@ -232,9 +238,21 @@ const PDFPreview = () => {
       <Divider sx={{ my: 3 }} />
 
       {/* Estimate Info */}
-      <Typography variant="h6" fontWeight="bold" sx={{ color: accentColor }}>ESTIMATE</Typography>
-      <Typography>#{estimate._id?.slice(-10)}</Typography>
-      <Typography>{new Date(estimate.createdAt).toLocaleDateString()}</Typography>
+      <Typography variant="h6" fontWeight="bold" sx={{ color: accentColor }}>
+          ESTIMATE
+        </Typography>
+        <Typography>ID: #{estimate._id?.slice(-10)}</Typography>
+        <Typography>
+          {estimate.date
+            ? new Date(estimate.date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })
+            : 'Date not available'}
+        </Typography>
+
+
 
       <Box mt={3}>
         <Typography variant="subtitle1" fontWeight="bold">Bill To:</Typography>
