@@ -16,6 +16,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  subscription: {
+    plan: { type: String, enum: ['free', 'pro'], default: 'free' },
+    stripeCustomerId: { type: String },
+    stripeSubscriptionId: { type: String },
+    expiresAt: { type: Date },
+  },
 });
 
 module.exports = mongoose.model('User', userSchema);
