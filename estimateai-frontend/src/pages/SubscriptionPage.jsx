@@ -47,7 +47,7 @@ const SubscriptionPage = () => {
         Upgrade to unlock more features and AI-powered tools
       </Typography>
 
-      <Grid container spacing={3}>
+      <Grid container spacing={5} justifyContent={'center'}>
         {plans.map((plan, idx) => (
           <Grid item xs={12} md={4} key={idx}>
             <Card sx={{ backgroundColor: plan.color }}>
