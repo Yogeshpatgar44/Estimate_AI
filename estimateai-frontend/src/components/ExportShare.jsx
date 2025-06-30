@@ -151,6 +151,12 @@ const ExportShare = () => {
   const handleEmailSend = async () => {
     try {
       const pdfBase64 = await generatePDFBase64();
+  
+      if (!pdfBase64) {
+        alert('PDF generation failed.');
+        return;
+      }
+  
       const response = await fetch(`${BASE_URL}/estimates/${id}/send-email`, {
         method: 'POST',
         headers: {
@@ -158,26 +164,30 @@ const ExportShare = () => {
           Authorization: user?.token,
         },
         body: JSON.stringify({
-          to: email,
+          toEmail: email,
           subject: 'Your Estimate PDF',
-          htmlContent: '<p>Please find your estimate attached.</p>',
-          pdfBase64,
+          html: '<p>Please find your estimate attached.</p>',
+          attachment: {
+            filename: 'estimate.pdf',
+            content: pdfBase64.split(',')[1], // remove `data:application/pdf;base64,` prefix
+          },
         }),
       });
-
-      console.log('PDF Base64 size:', pdfBase64?.length);
-
+  
+      console.log('PDF Base64 size:', pdfBase64.length);
+  
       const data = await response.json();
       if (response.ok) {
         alert('Email sent successfully!');
       } else {
-        alert('Failed to send email: ' + data.message);
+        alert('Failed to send email: ' + (data?.message || 'Unknown error'));
       }
     } catch (err) {
       console.error(err);
       alert('Email failed to send PDF.');
     }
   };
+  
   
   if (!estimate) return <Typography></Typography>;
 
