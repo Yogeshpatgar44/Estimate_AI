@@ -93,19 +93,29 @@ const EditEstimate = () => {
       });
   
       const data = await res.json();
-      alert('Estimate updated successfully ✅');
+  
+      if (!res.ok) {
+        throw new Error(data.message || 'Failed to update');
+      }
+  
+      enqueueSnackbar('Estimate updated successfully ✅', { variant: 'success' });
       setEstimate(data); // update UI with latest values
     } catch (err) {
       console.error('Update failed:', err);
-      alert('Failed to update estimate ❌');
+      enqueueSnackbar('Failed to update estimate ❌', { variant: 'error' });
     }
   };
   
+  
   const applyModifier = () => {
-    if (!modifier.trim()) return;
+    if (!modifier.trim()) {
+      enqueueSnackbar('Modifier is empty', { variant: 'warning' });
+      return;
+    }
   
     const mod = modifier.toLowerCase();
     let newItems = [...items];
+    let applied = false;
   
     if (mod.includes('discount')) {
       const match = mod.match(/(\d+)%/);
@@ -115,6 +125,7 @@ const EditEstimate = () => {
           ...item,
           unitCost: item.unitCost * (1 - percent),
         }));
+        applied = true;
       }
     }
   
@@ -126,12 +137,21 @@ const EditEstimate = () => {
           ...item,
           unitCost: item.unitCost * (1 + percent),
         }));
+        applied = true;
       }
     }
   
-    setItems(newItems);
-    setModifier('');
+    if (applied) {
+      setItems(newItems);
+      enqueueSnackbar(`Modifier "${modifier}" applied successfully`, { variant: 'success' });
+      setModifier('');
+    } else {
+      enqueueSnackbar('Invalid modifier format. Please use "%", like "10% discount"', {
+        variant: 'warning',
+      });
+    }
   };
+  
   
 
   const handleAddGroup = () => {
