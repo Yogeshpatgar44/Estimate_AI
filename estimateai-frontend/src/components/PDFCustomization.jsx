@@ -40,22 +40,27 @@ const PDFCustomization = ({ estimate, onSave }) => {
 
   // 🔁 Load from localStorage on mount + override with estimate (if available)
   useEffect(() => {
-    const saved = localStorage.getItem('pdfCustomization');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      if (parsed.companyInfo) setCompanyInfo(parsed.companyInfo);
-      if (parsed.styling) setStyling(parsed.styling);
-      if (parsed.footer) setFooter(parsed.footer);
-    }
-
-    if (estimate) {
-      setCompanyInfo((prev) => ({
-        ...prev,
-        name: estimate.clientName || prev.name,
-        email: estimate.clientEmail || prev.email,
-      }));
+    const isNewEstimate = !estimate || !estimate._id; // You can adjust this check based on your data shape
+  
+    if (!isNewEstimate) {
+      const saved = localStorage.getItem('pdfCustomization');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.companyInfo) setCompanyInfo(parsed.companyInfo);
+        if (parsed.styling) setStyling(parsed.styling);
+        if (parsed.footer) setFooter(parsed.footer);
+      }
+  
+      if (estimate) {
+        setCompanyInfo((prev) => ({
+          ...prev,
+          name: estimate.clientName || prev.name,
+          email: estimate.clientEmail || prev.email,
+        }));
+      }
     }
   }, [estimate]);
+  
 
 
   const handleSave = () => {
