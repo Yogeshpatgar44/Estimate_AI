@@ -1,4 +1,5 @@
 const Estimate = require('../models/Estimate');
+const { sendEstimateEmail } = require('./emailService');
 
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -178,3 +179,45 @@ exports.deleteEstimate = async (req, res) => {
   }
 };
 
+// POST /api/estimates/:id/send-email
+
+// exports.sendEstimateEmailController = async (req, res) => {
+//   const { toEmail, subject, html } = req.body;
+
+//   try {
+//     await sendEstimateEmail(toEmail, subject, html);
+//     res.status(200).json({ message: 'Email sent successfully!' });
+//   } catch (err) {
+//     console.error('Send email error:', err);
+//     res.status(500).json({ error: 'Failed to send email' });
+//   }
+// };
+
+exports.sendEstimateEmailController = async (req, res) => {
+  const { toEmail, subject, html, attachment } = req.body;
+
+  try {
+    const mailOptions = {
+      from: `"Estimate App" <${process.env.SMTP_USER}>`,
+      to: toEmail,
+      subject,
+      html,
+      attachments: [],
+    };
+
+    if (attachment) {
+      mailOptions.attachments.push({
+        filename: attachment.filename || 'estimate.pdf',
+        content: Buffer.from(attachment.content, 'base64'),
+        encoding: 'base64',
+      });
+    }
+
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({ message: 'Email with PDF sent successfully!' });
+  } catch (err) {
+    console.error('Send email error:', err);
+    res.status(500).json({ error: 'Failed to send email with PDF' });
+  }
+};
