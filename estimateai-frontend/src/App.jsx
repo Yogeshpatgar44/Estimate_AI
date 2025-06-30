@@ -11,6 +11,8 @@ import PrivateRoute from './routes/PrivateRoute';
 import EstimateEditor from './pages/EstimateEditor';
 import "./App.css";
 import PDFPreview from './components/PDFPreview';
+import SubscriptionPage from './pages/SubscriptionPage'
+
 //this is main file
 
 function App() {
@@ -27,6 +29,8 @@ function App() {
         <Route path="/history" element={<PrivateRoute><Layout><History /></Layout></PrivateRoute>} />
         <Route path="/edit-estimate/:id" element={<EstimateEditor />} />
         <Route path="/pdf-preview/:id" element={<PDFPreview />} />
+        <Route path="/subscribe" element={<SubscriptionPage />} />
+
       </Routes>
 
     </Router>
