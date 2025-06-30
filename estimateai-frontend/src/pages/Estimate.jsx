@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import MicIcon from '@mui/icons-material/Mic';
 import jsPDF from 'jspdf';
-import { AuthContext } from '../context/Authcontext';
+import { AuthContext } from '../context/AuthContext';
 import BASE_URL from '../services/api';
 import { useNavigate } from 'react-router-dom';
 
