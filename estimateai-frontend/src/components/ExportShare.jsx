@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import html2pdf from 'html2pdf.js';
-import { AuthContext } from '../context/Authcontext';
+import { AuthContext } from '../context/AuthContext';
 import BASE_URL from '../services/api';
 import PDFPreview from '../components/PDFPreview';
 import { useSnackbar } from 'notistack';
