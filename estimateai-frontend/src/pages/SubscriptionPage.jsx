@@ -40,10 +40,10 @@ const SubscriptionPage = () => {
     <Navbar/>
     <Box sx={{ p: 4, maxWidth: 1200, mx: 'auto' }}>
 
-      <Typography variant="h4" fontWeight="bold" gutterBottom align="center">
+      <Typography variant="h4" fontWeight="bold" gutterBottom align="center" color='white'>
         Choose a Subscription Plan
       </Typography>
-      <Typography variant="subtitle1" color="textSecondary" align="center" mb={4}>
+      <Typography variant="subtitle1" color="textSecondary" align="center" mb={4} sx={{color:'white'}}>
         Upgrade to unlock more features and AI-powered tools
       </Typography>
 
