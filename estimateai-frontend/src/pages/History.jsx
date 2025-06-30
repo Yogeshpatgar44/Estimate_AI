@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { AuthContext } from '../context/Authcontext';
+import { AuthContext } from '../context/AuthContext';
 import BASE_URL from '../services/api';
 import { Typography, Card, CardContent } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
