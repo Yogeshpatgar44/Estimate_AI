@@ -14,8 +14,6 @@ app.use(express.json({ limit: '10mb' }));
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/estimates', require('./routes/estimateRoutes'));
-app.use('/api/subscription', require('./routes/subscriptionRoutes'));
-
 
 // DB Connection
 connectDB();
