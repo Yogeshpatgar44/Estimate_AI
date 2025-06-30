@@ -87,40 +87,40 @@ const PDFPreview = () => {
 
 
   return (
-    <Paper sx={{ p: 4, maxWidth: 1000, margin: 'auto', fontFamily, fontSize }}>
-      <Typography variant="h5" fontWeight="bold" gutterBottom sx={{ color: headerColor }}>
-        PDF Preview
+    <Paper  sx={{ maxWidth: 1000, margin: 'auto', fontFamily, fontSize, padding:1 }}>
+      <Box
+  sx={{
+    backgroundColor: headerColor,
+    padding: 2,
+    margin: 0,
+    color: 'white',
+  }}
+>
+  <Box display="flex" justifyContent="space-between" alignItems="flex-start">
+    {/* Company Info */}
+    <Box>
+      <Typography variant="h6" fontWeight="bold">{name}</Typography>
+      <Typography>{address}</Typography>
+      <Typography>{phone} | {email}</Typography>
+      <Typography>{website}</Typography>
+    </Box>
+
+    {/* Estimate Info */}
+    <Box textAlign="right">
+      <Typography variant="h6" fontWeight="bold">ESTIMATE</Typography>
+      <Typography>ID: #{estimate._id?.slice(-10)}</Typography>
+      <Typography>
+        {estimate.date
+          ? new Date(estimate.date).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })
+          : 'Date not available'}
       </Typography>
-      <Typography variant="body1" gutterBottom>
-        This is how your estimate will appear when exported as a PDF.
-      </Typography>
-
-      <Divider sx={{ my: 2 }} />
-
-      {/* Company Info */}
-      <Box>
-        <Typography variant="h6" fontWeight="bold">{name}</Typography>
-        <Typography>{address}</Typography>
-        <Typography>{phone} | {email}</Typography>
-        <Typography>{website}</Typography>
-      </Box>
-
-      <Divider sx={{ my: 3 }} />
-
-      {/* Estimate Info */}
-      <Typography variant="h6" fontWeight="bold" sx={{ color: accentColor }}>
-          ESTIMATE
-        </Typography>
-        <Typography>ID: #{estimate._id?.slice(-10)}</Typography>
-        <Typography>
-          {estimate.date
-            ? new Date(estimate.date).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })
-            : 'Date not available'}
-        </Typography>
+    </Box>
+  </Box>
+</Box>
 
 
 
@@ -176,7 +176,7 @@ const PDFPreview = () => {
       <Box display="flex" justifyContent="flex-end" flexDirection="column" alignItems="end">
         <Typography>Subtotal: ₹{subtotal.toFixed(2)}</Typography>
         <Typography>Tax: ₹{tax.toFixed(2)}</Typography>
-        <Typography fontWeight="bold">Total: ₹{total.toFixed(2)}</Typography>
+        <Typography fontWeight="bold" sx={{color: accentColor}}>Total: ₹{total.toFixed(2)}</Typography>
       </Box>
 
       <Divider sx={{ my: 3 }} />
@@ -192,8 +192,8 @@ const PDFPreview = () => {
       <Typography paragraph>
         {footer.terms || 'Payment is due within 30 days. This estimate is valid for 30 days.'}
       </Typography>
-
-      <Typography variant="body2" mt={3} sx={{ color: accentColor }}>
+      
+      <Typography variant="body2" mt={3} sx={{ backgroundColor: headerColor,padding:1,textAlign: 'center' }}>
         {footer.footerText || 'Thank you for choosing our services!'}
       </Typography>
     </Paper>
