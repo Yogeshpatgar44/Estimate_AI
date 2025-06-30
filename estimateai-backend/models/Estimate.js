@@ -13,6 +13,7 @@ const EstimateSchema = new mongoose.Schema({
   tax: Number,
   totalCost: Number,
   date: { type: Date, default: Date.now },
+  notes: String,
 });
 
 module.exports = mongoose.model('Estimate', EstimateSchema);
