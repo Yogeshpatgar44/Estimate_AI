@@ -292,9 +292,13 @@ const EditEstimate = () => {
 
       {/* Totals */}
       <Divider sx={{ my: 4 }} />
-      <Typography>Subtotal: ₹{subtotal.toFixed(2)}</Typography>
-      <Typography>Tax (10%): ₹{tax.toFixed(2)}</Typography>
-      <Typography fontWeight="bold">Total: ₹{total.toFixed(2)}</Typography>
+
+      <Box sx={{ textAlign: 'right' }}>
+        <Typography>Subtotal: ₹{subtotal.toFixed(2)}</Typography>
+        <Typography>Tax (10%): ₹{tax.toFixed(2)}</Typography>
+        <Typography fontWeight="bold">Total: ₹{total.toFixed(2)}</Typography>
+      </Box>
+
 
       {/* Notes */}
       <Box mt={4}>
