@@ -13,6 +13,9 @@ import html2pdf from 'html2pdf.js';
 import { AuthContext } from '../context/AuthContext';
 import BASE_URL from '../services/api';
 import PDFPreview from '../components/PDFPreview';
+import { useSnackbar } from 'notistack';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 const ExportShare = () => {
   const { id } = useParams();
@@ -20,6 +23,9 @@ const ExportShare = () => {
 
   const [estimate, setEstimate] = useState(null);
   const [email, setEmail] = useState('');
+  const { enqueueSnackbar } = useSnackbar();
+  const [loading, setLoading] = useState(false);
+
   const [customization, setCustomization] = useState({
     companyInfo: { name: '' },
     styling: {
@@ -95,45 +101,51 @@ const ExportShare = () => {
   };
   
   
-  const handleEmailSend = async () => {
-    try {
-      const pdfBase64 = await generatePDFBase64();
+    
   
-      if (!pdfBase64) {
-        alert('PDF generation failed.');
-        return;
-      }
+    const handleEmailSend = async () => {
+      try {
+        setLoading(true);
   
-      const response = await fetch(`${BASE_URL}/estimates/${id}/send-email`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: user?.token,
-        },
-        body: JSON.stringify({
-          toEmail: email,
-          subject: 'Your Estimate PDF',
-          html: '<p>Please find your estimate attached.</p>',
-          attachment: {
-            filename: 'estimate.pdf',
-            content: pdfBase64.split(',')[1], // remove `data:application/pdf;base64,` prefix
+        const pdfBase64 = await generatePDFBase64();
+  
+        if (!pdfBase64) {
+          enqueueSnackbar('PDF generation failed.', { variant: 'error' });
+          setLoading(false);
+          return;
+        }
+  
+        const response = await fetch(`${BASE_URL}/estimates/${id}/send-email`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: user?.token,
           },
-        }),
-      });
+          body: JSON.stringify({
+            toEmail: email,
+            subject: 'Your Estimate PDF',
+            html: '<p>Please find your estimate attached.</p>',
+            attachment: {
+              filename: 'estimate.pdf',
+              content: pdfBase64.split(',')[1],
+            },
+          }),
+        });
   
-      console.log('PDF Base64 size:', pdfBase64.length);
+        const data = await response.json();
   
-      const data = await response.json();
-      if (response.ok) {
-        alert('Email sent successfully!');
-      } else {
-        alert('Failed to send email: ' + (data?.message || 'Unknown error'));
+        if (response.ok) {
+          enqueueSnackbar('Email sent successfully!', { variant: 'success' });
+        } else {
+          enqueueSnackbar(`Failed to send email: ${data?.message || 'Unknown error'}`, { variant: 'error' });
+        }
+      } catch (err) {
+        console.error(err);
+        enqueueSnackbar('Email failed to send PDF.', { variant: 'error' });
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error(err);
-      alert('Email failed to send PDF.');
-    }
-  };
+    };
   
   
   if (!estimate) return <Typography></Typography>;
@@ -180,9 +192,15 @@ const ExportShare = () => {
         onChange={(e) => setEmail(e.target.value)}
         sx={{ mb: 2,mr:5 }}
       />
-      <Button variant="contained" color="secondary" onClick={handleEmailSend}>
-        Send via Email
-      </Button>
+      <Button
+      variant="contained"
+      color="secondary"
+      onClick={handleEmailSend}
+      disabled={loading}
+      startIcon={loading ? <CircularProgress size={20} color="inherit" /> : null}
+    >
+      {loading ? 'Sending...' : 'Send via Email'}
+    </Button>
 
       <Divider sx={{ my: 3 }} />
 
