@@ -185,9 +185,19 @@ const EditEstimate = () => {
 
       {/* Line Items */}
       <Box mt={4}>
-        <Typography variant="h6" gutterBottom>Line Items</Typography>
-        <Button variant="outlined" sx={{display:'flex'}} startIcon={<AddIcon />} onClick={handleAddItem}>Add Item</Button>
-
+      <Box mt={4} display="flex" justifyContent="space-between" alignItems="center">
+        <Typography variant="h6" gutterBottom>
+          Line Items
+        </Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<AddIcon />}
+          onClick={handleAddItem}
+        >
+          Add Item
+        </Button>
+      </Box>
         <Box mt={2}>
           {items.map((item, idx) => (
             <Box key={idx} display="flex" alignItems="center" gap={2} mb={2}>
