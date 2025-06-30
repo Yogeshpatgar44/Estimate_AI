@@ -172,7 +172,7 @@ const EditEstimate = () => {
   const tax = subtotal * 0.1;
   const total = subtotal + tax;
 
-  if (!estimate) return <Typography>Loading...</Typography>;
+  if (!estimate) return <Typography></Typography>;
 
   return (
     <Paper sx={{ p: 4, maxWidth: 1000, margin: 'auto' }}>

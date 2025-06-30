@@ -262,15 +262,43 @@ const PDFPreview = () => {
 
       <Divider sx={{ my: 3 }} />
 
-      {/* Line Items */}
-      {items.map((item, i) => (
-        <Box key={i} display="flex" justifyContent="space-between" my={1}>
-          <Typography>{item.item}</Typography>
-          <Typography>{item.quantity}</Typography>
-          <Typography>₹{item.unitCost.toFixed(2)}</Typography>
-          <Typography>₹{(item.quantity * item.unitCost).toFixed(2)}</Typography>
+        {/* Line Items Section */}
+        <Typography variant="h6" gutterBottom>Line Items</Typography>
+
+        {/* Header */}
+        <Box
+          display="flex"
+          fontWeight="bold"
+          borderBottom="2px solid #000"
+          py={1}
+          sx={{ fontFamily }}
+        >
+          <Box width="30%">Item</Box>
+          <Box width="15%" textAlign="right">Qty</Box>
+          <Box width="25%" textAlign="right">Unit Cost</Box>
+          <Box width="30%" textAlign="right">Total</Box>
         </Box>
-      ))}
+
+        {/* Items */}
+        {items.map((item, i) => (
+          <Box
+            key={i}
+            display="flex"
+            justifyContent="space-between"
+            my={1}
+            sx={{
+              fontFamily,
+              borderBottom: '1px solid #ddd',
+              py: 0.5,
+            }}
+          >
+            <Box width="30%">{item.item}</Box>
+            <Box width="15%" textAlign="right">{item.quantity}</Box>
+            <Box width="25%" textAlign="right">₹{item.unitCost.toFixed(2)}</Box>
+            <Box width="30%" textAlign="right">₹{(item.quantity * item.unitCost).toFixed(2)}</Box>
+          </Box>
+        ))}
+
 
       <Divider sx={{ my: 3 }} />
 
