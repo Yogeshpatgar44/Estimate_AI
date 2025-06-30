@@ -90,7 +90,7 @@ exports.generateEstimate = async (req, res) => {
       materials: fallbackMaterials,
       labor: fallbackLabor,
       equipment: fallbackEquipment,
-      notes: "This is a mock AI-generated estimate including equipment.",
+      notes: "",
       subtotal,
       tax,
       totalCost,
