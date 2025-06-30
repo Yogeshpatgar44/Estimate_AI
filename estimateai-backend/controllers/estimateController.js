@@ -14,6 +14,7 @@ exports.generateEstimate = async (req, res) => {
 
       {
         "materials": [{ "item": "Bricks", "quantity": 500, "unitCost": 6 }],
+        "labour":[{ item: "Labor", "quantity": 10, "unitCost": 800 }]
         "equipment": [{ "item": "Excavator", "quantity": 2, "unitCost": 5000 }],
         "notes": "Any important notes"
       }
@@ -54,17 +55,24 @@ exports.generateEstimate = async (req, res) => {
 
     const fallbackMaterials = [
       { item: "Bricks", quantity: 500, unitCost: 6 },
-      { item: "Cement Bags", quantity: 20, unitCost: 350 }
+      { item: "Cement Bags", quantity: 20, unitCost: 350 },
+      { item: "Sand", quantity: 5, unitCost: 1200 },
+      { item: "Steel Rods", quantity: 30, unitCost: 450 },
+      { item: "Concrete Blocks", quantity: 100, unitCost: 40 }
     ];
 
     const fallbackLabor = [
-      { role: "Labor", days: 10, dailyRate: 800 }
+      { item: "Labor", quantity: 10, unitCost: 800 }
     ];
 
     const fallbackEquipment = [
       { item: "Mixer Machine", quantity: 1, unitCost: 5000 },
-      { item: "Scaffolding", quantity: 10, unitCost: 1000 }
+      { item: "Scaffolding", quantity: 10, unitCost: 1000 },
+      { item: "Vibrator Machine", quantity: 1, unitCost: 4500 },
+      { item: "Wheelbarrow", quantity: 2, unitCost: 1500 },
+      { item: "Concrete Cutter", quantity: 1, unitCost: 6000 }
     ];
+    
 
     const subtotal =
       fallbackMaterials.reduce((sum, m) => sum + m.quantity * m.unitCost, 0) +
