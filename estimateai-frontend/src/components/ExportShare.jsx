@@ -20,7 +20,6 @@ const ExportShare = () => {
 
   const [estimate, setEstimate] = useState(null);
   const [email, setEmail] = useState('');
-  const [whatsapp, setWhatsapp] = useState('');
   const [customization, setCustomization] = useState({
     companyInfo: { name: '' },
     styling: {
@@ -74,15 +73,113 @@ const ExportShare = () => {
       .save();
   };
 
-  const handleEmailSend = () => {
-    alert(`Estimate sent to ${email}`);
+  const generatePDFBase64 = async () => {
+    if (!previewRef.current) return null;
+    const element = previewRef.current;
+  
+    const opt = {
+      margin: 10,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
+    };
+  
+    const worker = html2pdf().set(opt).from(element);
+    const pdfBlob = await worker.outputPdf('blob');
+    
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result); // base64 string
+      reader.readAsDataURL(pdfBlob);
+    });
   };
+  
 
-  const handleWhatsAppSend = () => {
-    alert(`Estimate shared via WhatsApp to ${whatsapp}`);
+  // const handleEmailSend = async () => {
+  //   if (!previewRef.current) return alert('Preview not available');
+  
+  //   try {
+  //     // 1. Generate PDF as blob
+  //     const opt = {
+  //       margin: 10,
+  //       filename: 'estimate.pdf',
+  //       image: { type: 'jpeg', quality: 0.98 },
+  //       html2canvas: { scale: 2 },
+  //       jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
+  //     };
+  
+  //     const pdfBlob = await html2pdf().from(previewRef.current).set(opt).outputPdf('blob');
+  
+  //     // 2. Convert blob to base64
+  //     const base64 = await new Promise((resolve, reject) => {
+  //       const reader = new FileReader();
+  //       reader.onloadend = () => resolve(reader.result.split(',')[1]);
+  //       reader.onerror = reject;
+  //       reader.readAsDataURL(pdfBlob);
+  //     });
+  
+  //     // 3. Send to backend
+  //     const res = await fetch(`${BASE_URL}/estimates/${id}/send-email`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: user.token,
+  //       },
+  //       body: JSON.stringify({
+  //         toEmail: email,
+  //         subject: 'Your Estimate from Estimate App',
+  //         html: '<p>Please find the estimate PDF attached.</p>',
+  //         attachment: {
+  //           filename: 'estimate.pdf',
+  //           content: base64,
+  //         },
+  //       }),
+  //     });
+  
+  //     const data = await res.json();
+  //     if (res.ok) {
+  //       alert('Email with PDF sent successfully!');
+  //     } else {
+  //       alert('Failed to send email: ' + data.error);
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //     alert('Error sending email');
+  //   }
+  // };
+  
+  const handleEmailSend = async () => {
+    try {
+      const pdfBase64 = await generatePDFBase64();
+      const response = await fetch(`${BASE_URL}/estimates/${id}/send-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: user?.token,
+        },
+        body: JSON.stringify({
+          to: email,
+          subject: 'Your Estimate PDF',
+          htmlContent: '<p>Please find your estimate attached.</p>',
+          pdfBase64,
+        }),
+      });
+
+      console.log('PDF Base64 size:', pdfBase64?.length);
+
+      const data = await response.json();
+      if (response.ok) {
+        alert('Email sent successfully!');
+      } else {
+        alert('Failed to send email: ' + data.message);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Email failed to send PDF.');
+    }
   };
-
-  if (!estimate) return <Typography>Loading...</Typography>;
+  
+  if (!estimate) return <Typography></Typography>;
 
   const { companyInfo, styling } = customization;
 
@@ -94,10 +191,13 @@ const ExportShare = () => {
 
       <Divider sx={{ my: 3 }} />
 
-      <Typography variant="h6" gutterBottom>Export Customized PDF</Typography>
-      <Button variant="contained" color="primary" onClick={handleExport}>
+      <Typography variant="h6" gutterBottom >Export Customized PDF
+      <Button variant="contained" color="primary" onClick={handleExport} sx={{ml:8}}>
         Export PDF
       </Button>
+
+      </Typography>
+      
 
       {/* Hidden PDF Preview Rendered Off-Screen */}
       <div style={{
@@ -118,28 +218,13 @@ const ExportShare = () => {
       <Typography variant="h6">Email to Client</Typography>
       <TextField
         label="Client Email"
-        fullWidth
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        sx={{ mb: 2 }}
+        sx={{ mb: 2,mr:5 }}
       />
       <Button variant="contained" color="secondary" onClick={handleEmailSend}>
         Send via Email
-      </Button>
-
-      <Divider sx={{ my: 3 }} />
-
-      <Typography variant="h6">WhatsApp Number</Typography>
-      <TextField
-        label="WhatsApp Number"
-        fullWidth
-        value={whatsapp}
-        onChange={(e) => setWhatsapp(e.target.value)}
-        sx={{ mb: 2 }}
-      />
-      <Button variant="contained" color="success" onClick={handleWhatsAppSend}>
-        Send via WhatsApp
       </Button>
 
       <Divider sx={{ my: 3 }} />

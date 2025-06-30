@@ -87,7 +87,7 @@ const PDFPreview = () => {
 
 
   return (
-    <Paper  sx={{ maxWidth: 1000, margin: 'auto', fontFamily, fontSize, padding:1 }}>
+    <Paper  sx={{ maxWidth: 1000, margin: 'auto', fontFamily, fontSize, padding:4 }}>
       <Box
   sx={{
     backgroundColor: headerColor,
