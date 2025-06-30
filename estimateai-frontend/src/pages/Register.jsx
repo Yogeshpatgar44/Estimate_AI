@@ -11,7 +11,7 @@ import {
   InputAdornment,
 } from '@mui/material';
 import { Visibility, VisibilityOff, ArrowBack } from '@mui/icons-material';
-import { AuthContext } from '../context/AuthContext';
+import { AuthContext } from '../context/Authcontext';
 import { useSnackbar } from 'notistack';
 
 const Register = () => {

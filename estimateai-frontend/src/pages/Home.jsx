@@ -20,7 +20,7 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from 'recharts';
-import { AuthContext } from '../context/AuthContext';
+import { AuthContext } from '../context/Authcontext';
 import BASE_URL from '../services/api';
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
