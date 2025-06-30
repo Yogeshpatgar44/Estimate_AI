@@ -94,59 +94,6 @@ const ExportShare = () => {
     });
   };
   
-
-  // const handleEmailSend = async () => {
-  //   if (!previewRef.current) return alert('Preview not available');
-  
-  //   try {
-  //     // 1. Generate PDF as blob
-  //     const opt = {
-  //       margin: 10,
-  //       filename: 'estimate.pdf',
-  //       image: { type: 'jpeg', quality: 0.98 },
-  //       html2canvas: { scale: 2 },
-  //       jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
-  //     };
-  
-  //     const pdfBlob = await html2pdf().from(previewRef.current).set(opt).outputPdf('blob');
-  
-  //     // 2. Convert blob to base64
-  //     const base64 = await new Promise((resolve, reject) => {
-  //       const reader = new FileReader();
-  //       reader.onloadend = () => resolve(reader.result.split(',')[1]);
-  //       reader.onerror = reject;
-  //       reader.readAsDataURL(pdfBlob);
-  //     });
-  
-  //     // 3. Send to backend
-  //     const res = await fetch(`${BASE_URL}/estimates/${id}/send-email`, {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         Authorization: user.token,
-  //       },
-  //       body: JSON.stringify({
-  //         toEmail: email,
-  //         subject: 'Your Estimate from Estimate App',
-  //         html: '<p>Please find the estimate PDF attached.</p>',
-  //         attachment: {
-  //           filename: 'estimate.pdf',
-  //           content: base64,
-  //         },
-  //       }),
-  //     });
-  
-  //     const data = await res.json();
-  //     if (res.ok) {
-  //       alert('Email with PDF sent successfully!');
-  //     } else {
-  //       alert('Failed to send email: ' + data.error);
-  //     }
-  //   } catch (err) {
-  //     console.error(err);
-  //     alert('Error sending email');
-  //   }
-  // };
   
   const handleEmailSend = async () => {
     try {
