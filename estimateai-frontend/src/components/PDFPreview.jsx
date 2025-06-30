@@ -50,7 +50,7 @@ const PDFPreview = ({ estimate }) => {
   const fontSize = fontSizeMap[styling.fontSize] || '16px';
 
   return (
-    <Paper sx={{ p: 4, maxWidth: 800, margin: 'auto', fontFamily, fontSize }}>
+    <Paper sx={{ p: 4, maxWidth: 1000, margin: 'auto', fontFamily, fontSize }}>
       <Typography variant="h5" fontWeight="bold" gutterBottom sx={{ color: headerColor }}>
         PDF Preview
       </Typography>

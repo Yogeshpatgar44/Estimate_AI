@@ -8,11 +8,15 @@ import { useParams } from 'react-router-dom';
 import BASE_URL from '../services/api'; // your backend base URL
 import { AuthContext } from '../context/AuthContext';
 import { useContext } from 'react';
+import { useSnackbar } from 'notistack';
+
 
 const EditEstimate = () => {
   const { id } = useParams();
   const { user } = useContext(AuthContext);
   const [estimate, setEstimate] = useState(null);
+  const { enqueueSnackbar } = useSnackbar();
+
 
   const [title, setTitle] = useState('');
   const [clientName, setClientName] = useState('');
@@ -49,6 +53,8 @@ const EditEstimate = () => {
 
     fetchEstimate();
   }, [id, user.token]);
+
+  
 
   const handleAddItem = () => {
     setItems([
@@ -131,9 +137,13 @@ const EditEstimate = () => {
   const handleAddGroup = () => {
     if (newGroup.trim() && !groups.includes(newGroup)) {
       setGroups([...groups, newGroup]);
+      enqueueSnackbar(`Group "${newGroup}" added successfully`, { variant: 'success' });
       setNewGroup('');
+    } else {
+      enqueueSnackbar('Group name is empty or already exists ', { variant: 'warning' });
     }
   };
+  
 
   const calculateSubtotal = () =>
     items.reduce((acc, item) => acc + (item.quantity * item.unitCost), 0);
@@ -176,7 +186,7 @@ const EditEstimate = () => {
       {/* Line Items */}
       <Box mt={4}>
         <Typography variant="h6" gutterBottom>Line Items</Typography>
-        <Button variant="outlined" startIcon={<AddIcon />} onClick={handleAddItem}>Add Item</Button>
+        <Button variant="outlined" sx={{display:'flex'}} startIcon={<AddIcon />} onClick={handleAddItem}>Add Item</Button>
 
         <Box mt={2}>
           {items.map((item, idx) => (
@@ -265,32 +275,42 @@ const EditEstimate = () => {
           onChange={(e) => setNotes(e.target.value)}
           multiline
           fullWidth
-          rows={4}
+          rows={2}
         />
       </Box>
 
       {/* AI Modifier */}
       <Box mt={4}>
         <Typography variant="h6">AI Modifier</Typography>
-        <TextField
-          placeholder="e.g., 'Add 15% tax', 'Apply 10% discount'..."
-          value={modifier}
-          onChange={(e) => setModifier(e.target.value)}
-          fullWidth
-        />
-        <Button variant="contained" color="primary" sx={{ mt: 2 }} onClick={applyModifier}>
-          Apply Changes
-        </Button>
+
+        <Box display="flex" gap={2} mt={1}>
+          <TextField
+            placeholder="e.g., 'Add 15% tax', 'Apply 10% discount'..."
+            value={modifier}
+            onChange={(e) => setModifier(e.target.value)}
+            fullWidth
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={applyModifier}
+            sx={{ whiteSpace: 'nowrap' }}
+          >
+            Apply Changes
+          </Button>
+        </Box>
 
         <Button
           variant="contained"
           color="success"
-          sx={{ mt: 2, ml: 2 }}
+          fullWidth
+          sx={{ mt: 2 }}
           onClick={handleSaveEstimate}
         >
           Save Estimate
         </Button>
       </Box>
+
 
     </Paper>
   );
