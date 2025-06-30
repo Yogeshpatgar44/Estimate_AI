@@ -10,6 +10,7 @@ import Layout from './components/Layout';
 import PrivateRoute from './routes/PrivateRoute';
 import EstimateEditor from './pages/EstimateEditor';
 import "./App.css";
+import PDFPreview from './components/PDFPreview';
 //this is main file
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
         <Route path="/estimate" element={<PrivateRoute><Layout><Estimate /></Layout></PrivateRoute>} />
         <Route path="/history" element={<PrivateRoute><Layout><History /></Layout></PrivateRoute>} />
         <Route path="/edit-estimate/:id" element={<EstimateEditor />} />
+        <Route path="/pdf-preview/:id" element={<PDFPreview />} />
       </Routes>
 
     </Router>
