@@ -1,38 +1,234 @@
 const Estimate = require('../models/Estimate');
 const { sendEstimateEmail } = require('./emailService');
 
-const { GoogleGenerativeAI } = require('@google/generative-ai');
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+// const { GoogleGenerativeAI } = require('@google/generative-ai');
+// const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+// exports.generateEstimate = async (req, res) => {
+//   const { title, clientName, clientEmail, input } = req.body;
+
+//   try {
+//     const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
+
+//     const prompt = `
+//       You are a construction estimator AI. Given this project description, return a JSON object with the following structure:
+
+//       {
+//         "materials": [{ "item": "Bricks", "quantity": 500, "unitCost": 6 }],
+//         "labour":[{ item: "Labor", "quantity": 10, "unitCost": 800 }]
+//         "equipment": [{ "item": "Excavator", "quantity": 2, "unitCost": 5000 }],
+//         "notes": "Any important notes"
+//       }
+
+//       Description: ${input}
+//       `;
+
+//     const result = await model.generateContent(prompt);
+//     const response = await result.response;
+//     const text = response.text();
+
+//     const jsonText = text.replace(/```json|```/g, '').trim();
+//     const parsed = JSON.parse(jsonText);
+
+//     const subtotal =
+//       parsed.materials.reduce((sum, m) => sum + m.quantity * m.unitCost, 0) +
+//       parsed.labor.reduce((sum, l) => sum + l.days * l.dailyRate, 0) +
+//       parsed.equipment.reduce((sum, e) => sum + e.quantity * e.unitCost, 0);
+
+//     const tax = subtotal * 0.1;
+//     const totalCost = subtotal + tax;
+
+//     return res.status(200).json({
+//       title,
+//       clientName,
+//       clientEmail,
+//       input,
+//       materials: parsed.materials,
+//       labor: parsed.labor,
+//       equipment: parsed.equipment,
+//       notes: parsed.notes || '',
+//       subtotal,
+//       tax,
+//       totalCost,
+//     });
+//   } catch (err) {
+//     console.error('Gemini AI Error:', err);
+
+//     const fallbackMaterials = [
+//       { item: "Bricks", quantity: 500, unitCost: 6 },
+//       { item: "Cement Bags", quantity: 20, unitCost: 350 },
+//       { item: "Sand", quantity: 5, unitCost: 1200 },
+//       { item: "Steel Rods", quantity: 30, unitCost: 450 },
+//       { item: "Concrete Blocks", quantity: 100, unitCost: 40 }
+//     ];
+
+//     const fallbackLabor = [
+//       { item: "Labor", quantity: 10, unitCost: 800 }
+//     ];
+
+//     const fallbackEquipment = [
+//       { item: "Mixer Machine", quantity: 1, unitCost: 5000 },
+//       { item: "Scaffolding", quantity: 10, unitCost: 1000 },
+//       { item: "Vibrator Machine", quantity: 1, unitCost: 4500 },
+//       { item: "Wheelbarrow", quantity: 2, unitCost: 1500 },
+//       { item: "Concrete Cutter", quantity: 1, unitCost: 6000 }
+//     ];
+    
+
+//     const subtotal =
+//       fallbackMaterials.reduce((sum, m) => sum + m.quantity * m.unitCost, 0) +
+//       fallbackLabor.reduce((sum, l) => sum + l.days * l.dailyRate, 0) +
+//       fallbackEquipment.reduce((sum, e) => sum + e.quantity * e.unitCost, 0);
+
+//     const tax = subtotal * 0.1;
+//     const totalCost = subtotal + tax;
+
+//     return res.status(200).json({
+//       title,
+//       clientName,
+//       clientEmail,
+//       input,
+//       materials: fallbackMaterials,
+//       labor: fallbackLabor,
+//       equipment: fallbackEquipment,
+//       notes: "",
+//       subtotal,
+//       tax,
+//       totalCost,
+//     });
+//   }
+// };
+
+// const axios = require('axios');
+
+// exports.generateEstimate = async (req, res) => {
+//   const { title, clientName, clientEmail, input } = req.body;
+
+//   try {
+//     const prompt = `
+// You are a construction estimation AI. Read the project description and return a JSON with:
+// {
+//   "materials": [ { "item": "Bricks", "quantity": 500, "unitCost": 6 } ],
+//   "labor": [ { "item": "Mason", "quantity": 2, "unitCost": 1000 } ],
+//   "equipment": [ { "item": "Excavator", "quantity": 1, "unitCost": 5000 } ],
+//   "notes": "Only daytime work, easy access site"
+// }
+
+// Use realistic values. Keep the response only in JSON.
+
+// Project Description:
+// ${input}
+// `;
+
+//     const openRouterResponse = await axios.post(
+//       'https://openrouter.ai/api/v1/chat/completions',
+//       {
+//         model: 'mistralai/mistral-7b-instruct',
+//         messages: [
+//           {
+//             role: 'user',
+//             content: prompt,
+//           },
+//         ],
+//       },
+//       {
+//         headers: {
+//           Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+//           'Content-Type': 'application/json',
+//         },
+//       }
+//     );
+
+//     const aiMessage = openRouterResponse.data.choices[0].message.content;
+
+//     // Clean and parse JSON
+//     const jsonText = aiMessage.replace(/```json|```/g, '').trim();
+//     const parsed = JSON.parse(jsonText);
+
+//     const subtotal =
+//       parsed.materials.reduce((sum, m) => sum + m.quantity * m.unitCost, 0) +
+//       parsed.labor.reduce((sum, l) => sum + l.quantity * l.unitCost, 0) +
+//       parsed.equipment.reduce((sum, e) => sum + e.quantity * e.unitCost, 0);
+
+//     const tax = subtotal * 0.1;
+//     const totalCost = subtotal + tax;
+
+//     return res.status(200).json({
+//       title,
+//       clientName,
+//       clientEmail,
+//       input,
+//       materials: parsed.materials,
+//       labor: parsed.labor,
+//       equipment: parsed.equipment,
+//       notes: parsed.notes || '',
+//       subtotal,
+//       tax,
+//       totalCost,
+//     });
+//   } catch (err) {
+//     console.error('OpenRouter AI Error:', err?.response?.data || err.message);
+//     return res.status(500).json({ error: 'AI failed to generate estimate. Try again later.' });
+//   }
+// };
+
+const axios = require('axios');
 
 exports.generateEstimate = async (req, res) => {
   const { title, clientName, clientEmail, input } = req.body;
 
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
-
     const prompt = `
-      You are a construction estimator AI. Given this project description, return a JSON object with the following structure:
+You are a professional construction cost estimation AI.
 
+Given the following construction project description, return only a JSON response (no explanation). The JSON must contain:
+
+{
+  "materials": [ { "item": "...", "quantity": ..., "unitCost": ... } ],
+  "labor": [ { "item": "...", "quantity": ..., "unitCost": ... } ],
+  "equipment": [ { "item": "...", "quantity": ..., "unitCost": ... } ],
+  "notes": "... (any special notes about the job site, working conditions, etc.)"
+}
+
+Rules:
+- Use only data relevant to the specific project description.
+- Do not return example items like 'Bricks', 'Cement Bags', or 'Labor' unless the input clearly requires them.
+- Use accurate, realistic values for quantities and costs.
+- Your response must be in **pure JSON format only**, without markdown or text.
+
+Project Description:
+${input}
+`;
+
+
+    const openRouterResponse = await axios.post(
+      'https://openrouter.ai/api/v1/chat/completions',
       {
-        "materials": [{ "item": "Bricks", "quantity": 500, "unitCost": 6 }],
-        "labour":[{ item: "Labor", "quantity": 10, "unitCost": 800 }]
-        "equipment": [{ "item": "Excavator", "quantity": 2, "unitCost": 5000 }],
-        "notes": "Any important notes"
+        model: 'mistralai/mistral-7b-instruct',
+        messages: [
+          {
+            role: 'user',
+            content: prompt,
+          },
+        ],
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
       }
+    );
 
-      Description: ${input}
-      `;
+    const aiMessage = openRouterResponse.data.choices[0].message.content;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-
-    const jsonText = text.replace(/```json|```/g, '').trim();
+    // Clean and parse JSON
+    const jsonText = aiMessage.replace(/```json|```/g, '').trim();
     const parsed = JSON.parse(jsonText);
 
     const subtotal =
       parsed.materials.reduce((sum, m) => sum + m.quantity * m.unitCost, 0) +
-      parsed.labor.reduce((sum, l) => sum + l.days * l.dailyRate, 0) +
+      parsed.labor.reduce((sum, l) => sum + l.quantity * l.unitCost, 0) +
       parsed.equipment.reduce((sum, e) => sum + e.quantity * e.unitCost, 0);
 
     const tax = subtotal * 0.1;
@@ -52,50 +248,8 @@ exports.generateEstimate = async (req, res) => {
       totalCost,
     });
   } catch (err) {
-    console.error('Gemini AI Error:', err);
-
-    const fallbackMaterials = [
-      { item: "Bricks", quantity: 500, unitCost: 6 },
-      { item: "Cement Bags", quantity: 20, unitCost: 350 },
-      { item: "Sand", quantity: 5, unitCost: 1200 },
-      { item: "Steel Rods", quantity: 30, unitCost: 450 },
-      { item: "Concrete Blocks", quantity: 100, unitCost: 40 }
-    ];
-
-    const fallbackLabor = [
-      { item: "Labor", quantity: 10, unitCost: 800 }
-    ];
-
-    const fallbackEquipment = [
-      { item: "Mixer Machine", quantity: 1, unitCost: 5000 },
-      { item: "Scaffolding", quantity: 10, unitCost: 1000 },
-      { item: "Vibrator Machine", quantity: 1, unitCost: 4500 },
-      { item: "Wheelbarrow", quantity: 2, unitCost: 1500 },
-      { item: "Concrete Cutter", quantity: 1, unitCost: 6000 }
-    ];
-    
-
-    const subtotal =
-      fallbackMaterials.reduce((sum, m) => sum + m.quantity * m.unitCost, 0) +
-      fallbackLabor.reduce((sum, l) => sum + l.days * l.dailyRate, 0) +
-      fallbackEquipment.reduce((sum, e) => sum + e.quantity * e.unitCost, 0);
-
-    const tax = subtotal * 0.1;
-    const totalCost = subtotal + tax;
-
-    return res.status(200).json({
-      title,
-      clientName,
-      clientEmail,
-      input,
-      materials: fallbackMaterials,
-      labor: fallbackLabor,
-      equipment: fallbackEquipment,
-      notes: "",
-      subtotal,
-      tax,
-      totalCost,
-    });
+    console.error('OpenRouter AI Error:', err?.response?.data || err.message);
+    return res.status(500).json({ error: 'AI failed to generate estimate. Try again later.' });
   }
 };
 
