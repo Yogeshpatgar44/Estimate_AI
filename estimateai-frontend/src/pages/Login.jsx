@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import { CircularProgress } from '@mui/material'; 
 import {
   TextField,
   Button,
@@ -19,10 +20,12 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = async () => {
+    setLoading(true);
     try {
       await login(username, password);
       enqueueSnackbar('Login successful!', { variant: 'success' });
@@ -30,6 +33,9 @@ const Login = () => {
     // eslint-disable-next-line no-unused-vars
     } catch (err) {
       enqueueSnackbar('Invalid username or password', { variant: 'error' });
+    }
+    finally {
+      setLoading(false); // 👈 Stop spinner
     }
   };
 
@@ -113,15 +119,20 @@ const Login = () => {
             }}
           />
 
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{ mt: 3 }}
-            onClick={handleSubmit}
-          >
-            Sign In
-          </Button>
+        <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              sx={{ mt: 3 }}
+              onClick={handleSubmit}
+              disabled={loading} // 👈 Disable while loading
+            >
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                'Sign In'
+              )}
+            </Button>
 
           <Box mt={2} textAlign="center">
             <Typography variant="body2">
