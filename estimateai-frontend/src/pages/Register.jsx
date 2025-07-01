@@ -13,6 +13,7 @@ import {
 import { Visibility, VisibilityOff, ArrowBack } from '@mui/icons-material';
 import { AuthContext } from '../context/AuthContext';
 import { useSnackbar } from 'notistack';
+import { CircularProgress } from '@mui/material';
 
 const Register = () => {
   const { register } = useContext(AuthContext);
@@ -23,6 +24,7 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
     if (!username || !password || !confirm || !fullName) {
@@ -35,6 +37,8 @@ const Register = () => {
       return;
     }
 
+    setLoading(true);
+
     try {
       await register({fullName,username, password});
       enqueueSnackbar('Registered successfully!', { variant: 'success' });
@@ -42,6 +46,9 @@ const Register = () => {
     // eslint-disable-next-line no-unused-vars
     } catch (err) {
       enqueueSnackbar('Username already taken', { variant: 'error' });
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -160,9 +167,15 @@ const Register = () => {
             fullWidth
             sx={{ mt: 3 }}
             onClick={handleSubmit}
+            disabled={loading} 
           >
-            Create Account
+            {loading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              'Create Account'
+            )}
           </Button>
+
 
           <Box mt={2} textAlign="center">
             <Typography variant="body2">
